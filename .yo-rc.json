@@ -1,0 +1,32 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "com.toleckk.insta"
+    },
+    "jhipsterVersion": "5.3.1",
+    "applicationType": "monolith",
+    "baseName": "WebApp",
+    "packageName": "com.toleckk.insta",
+    "packageFolder": "com/toleckk/insta",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "mysql",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "MTQ1NTU2OWFhNmRkNDQ0ZTUwN2NhYzI2ZWFjMzZkYTlkMTEyZTVkZWY1NzM0OWU5ZjJmZWY0ZjkwZDQyZWIxOGIwMWVkMGY0MzJkYzY5NzU4NzAyY2Y4ZGJjNTIwNTNmNWE5Nzg2ZDhkZjFjOGQzNDU3ZTY1M2Y1YTRhNDIyNmY=",
+    "clientFramework": "react",
+    "useSass": true,
+    "clientPackageManager": "npm",
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "enableTranslation": false
+  }
+}
