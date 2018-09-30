@@ -3,10 +3,7 @@ import './app.scss';
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { Card } from 'reactstrap';
 import { HashRouter as Router } from 'react-router-dom';
-import { ToastContainer, ToastPosition, toast } from 'react-toastify';
-
 import { IRootState } from 'app/shared/reducers';
 import { getSession } from 'app/shared/reducers/authentication';
 import { getProfile } from 'app/shared/reducers/application-profile';
@@ -16,6 +13,7 @@ import { hasAnyAuthority } from 'app/shared/auth/private-route';
 import ErrorBoundary from 'app/shared/error/error-boundary';
 import { AUTHORITIES } from 'app/config/constants';
 import AppRoutes from 'app/routes';
+import { Loader } from 'semantic-ui-react';
 
 export interface IAppProps extends StateProps, DispatchProps {}
 
@@ -25,35 +23,39 @@ export class App extends React.Component<IAppProps> {
     this.props.getProfile();
   }
 
-  render() {
-    const paddingTop = '60px';
+  loading() {
     return (
-      <Router>
-        <div className="app-container" style={{ paddingTop }}>
-          <ToastContainer
-            position={toast.POSITION.TOP_LEFT as ToastPosition}
-            className="toastify-container"
-            toastClassName="toastify-toast"
-          />
-          <ErrorBoundary>
-            <Header
-              isAuthenticated={this.props.isAuthenticated}
-              isAdmin={this.props.isAdmin}
-              ribbonEnv={this.props.ribbonEnv}
-              isInProduction={this.props.isInProduction}
-              isSwaggerEnabled={this.props.isSwaggerEnabled}
-            />
-          </ErrorBoundary>
-          <div className="container-fluid view-container" id="app-view-container">
-            <Card className="jh-card">
+      (localStorage.hasOwnProperty('jhi-authenticationToken') || sessionStorage.hasOwnProperty('jhi-authenticationToken')) &&
+      this.props.isLoading
+    );
+  }
+
+  render() {
+    // const paddingTop = '60px';
+    return (
+      <>
+        {this.loading() ? (
+          <Loader active size={'massive'} />
+        ) : (
+          <Router>
+            <>
+              <ErrorBoundary>
+                <Header
+                  isAuthenticated={this.props.isAuthenticated}
+                  isAdmin={this.props.isAdmin}
+                  ribbonEnv={this.props.ribbonEnv}
+                  isInProduction={this.props.isInProduction}
+                  isSwaggerEnabled={this.props.isSwaggerEnabled}
+                />
+              </ErrorBoundary>
               <ErrorBoundary>
                 <AppRoutes />
               </ErrorBoundary>
-            </Card>
-            <Footer />
-          </div>
-        </div>
-      </Router>
+              {this.props.isAuthenticated && <Footer />}
+            </>
+          </Router>
+        )}
+      </>
     );
   }
 }
@@ -63,7 +65,8 @@ const mapStateToProps = ({ authentication, applicationProfile }: IRootState) => 
   isAdmin: hasAnyAuthority(authentication.account.authorities, [AUTHORITIES.ADMIN]),
   ribbonEnv: applicationProfile.ribbonEnv,
   isInProduction: applicationProfile.inProduction,
-  isSwaggerEnabled: applicationProfile.isSwaggerEnabled
+  isSwaggerEnabled: applicationProfile.isSwaggerEnabled,
+  isLoading: authentication.loading
 });
 
 const mapDispatchToProps = { getSession, getProfile };
